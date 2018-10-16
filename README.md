@@ -1,7 +1,7 @@
-# CSE-511-Advanced-Algorithms
+# CSE 511: Advanced Algorithms
 Assignments done in **_CSE 511: Advanced Algorithms_** course in MS (CSE) program in North South University (NSU).
 
-# Assignment-1
+# Assignment 1
 Find the first index where the given target value appears in a given sorted array.
 
 **Sample input**
@@ -13,7 +13,7 @@ Enter target: 5
 
 Leftmost index of target is: 3
 
-# Assignment-2
+# Assignment 2
 Compute the number of inversions in a given an array.
 
 **Sample input**
@@ -24,7 +24,7 @@ Enter sorted array: 12 3 15 4
 
 Number of inversions: 3
 
-# Assignment-3
+# Assignment 3
 Sort an array of students based on their CGPAs in order to assign course registration slots to them. Specifically, student **_A_** should get course registration slot before student **_B_** if **_A_** has higher CGPA than **_B_**.
 For example, **_A_** has **_CGPA 3.5_** and **_B_** has **_CGPA 3.2_**, then **_A_** should come before **_B_** in the sorted order.
 To do so, create a class called **_Student_** containing some basic information of students such as **_id_**, **_name_**, **_credits completed_**, and **_CGPA_**. Then implement **_Quicksort Algorithm_** using **_random pivot_** with multithreading option to sort these students.
@@ -53,7 +53,7 @@ A text file called **_output.txt_** should contain the student-records in sorted
 
 Also show the time taken to complete the sorting (in microsecond or millisecond) in console.
 
-# Assignment-4
+# Assignment 4
 Select/find the student with i'th highest CGPA in a given array of students. To do so, create a class called **_Student_** containing some basic information of students such as **_id_**, **_name_**, **_credits completed_**, and **_CGPA_**. Then implement **_Randomized Selection Algorithm_**.
 
 **Sample input**

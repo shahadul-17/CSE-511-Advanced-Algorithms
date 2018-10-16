@@ -1,0 +1,11 @@
+# depslib dependency file v1.0
+1539076437 source:d:\documents\codeblocks projects\assignment-2\main.c
+	<stdio.h>
+	<string.h>
+	<limits.h>
+
+1539077013 source:d:\documents\github repositories\cse-511-advanced-algorithms\assignment-2\main.c
+	<stdio.h>
+	<string.h>
+	<limits.h>
+

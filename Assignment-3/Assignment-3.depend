@@ -1,0 +1,37 @@
+# depslib dependency file v1.0
+1539514338 source:d:\documents\codeblocks project\assignment-3\main.cpp
+	<iostream>
+	"student.h"
+
+1539514372 d:\documents\codeblocks project\assignment-3\student.h
+	<cstdio>
+	<cstdlib>
+	<cstring>
+
+1539514304 source:d:\documents\codeblocks project\assignment-3\student.cpp
+	"student.h"
+
+1539626626 source:d:\documents\codeblocks projects\assignment-3\student.cpp
+	"student.h"
+
+1539626626 d:\documents\codeblocks projects\assignment-3\student.h
+	<cstdio>
+	<cstdlib>
+	<cstring>
+
+1539626959 source:d:\documents\codeblocks projects\assignment-3\main.cpp
+	<iostream>
+	<cstdio>
+	<cstdlib>
+	<cstring>
+	<ctime>
+	<pthread.h>
+
+1539626959 source:d:\documents\github repositories\cse-511-advanced-algorithms\assignment-3\main.cpp
+	<iostream>
+	<cstdio>
+	<cstdlib>
+	<cstring>
+	<ctime>
+	<pthread.h>
+

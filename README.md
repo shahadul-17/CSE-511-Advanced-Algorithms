@@ -65,3 +65,26 @@ Just like **_input.txt_** of Assignment-3. Take the value of **_i_** as user inp
 In the console, show all the information of the student having i'th highest CGPA. e.g. if user enters **_i = 3_** then your program should print the following in the console
 
 12345   Abid Raihan     30		3.40
+
+# Assignment 5
+Implement the weighted task scheduling problem from a given an array of tasks, where each task has **_start time_**, **_finishing time_** and **_priority/weight_**.
+
+**Sample input**
+
+A text file called **_input.txt_** containing all the information of tasks. Each line of this file should contain the **_start time_**, **_finishing time_** and **_priority/weight_** separated by space just like below
+
+1 10 10  
+7 18 20  
+13 20 5  
+16 27 20  
+23 32 15  
+
+**Sample output**
+
+In the console, show all the information of tasks that maximize total weight and print the total weight as well. e.g. for the above input, the output should look just like below
+
+Selected activities:  
+7 18 20  
+23 32 15  
+
+Total weight: 35  

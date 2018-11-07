@@ -33,11 +33,13 @@ To do so, create a class called **_Student_** containing some basic information 
 
 A text file called **_input.txt_** containing all the information of students. Each line of this file should contain the **_id_**, **_name_**, **_credits completed_**, and **_CGPA_** separated by tabs just like below
 
-12345   Abid Raihan			30		3.4  
-26345   Hafiz Adnan			100		3.24  
-17345   Jakaria Ahmed		80		2.94  
-72845   Harun Yahia			100		3.84  
-23745   Jabid Hannan		80		3.47  
+<pre>
+12345   Abid Raihan     30    3.4
+26345   Hafiz Adnan     100   3.24
+17345   Jakaria Ahmed   80    2.94
+72845   Harun Yahia     100   3.84
+23745   Jabid Hannan    80    3.47
+</pre>
 
 Also ask the user if he/she wants to run the multithreaded version or single-threaded version of the sorting algorithm and execute the version selected by the user.
 
@@ -45,11 +47,13 @@ Also ask the user if he/she wants to run the multithreaded version or single-thr
 
 A text file called **_output.txt_** should contain the student-records in sorted order. e.g. for the above input, the **_output.txt_** should look just like below
 
-72845   Harun Yahia     100		3.84  
-23745   Jabid Hannan    80		3.47  
-12345   Abid Raihan     30		3.40  
-26345   Hafiz Adnan     100		3.24  
-17345   Jakaria Ahmed   80		2.94  
+<pre>
+72845   Harun Yahia     100   3.84
+23745   Jabid Hannan    80    3.47
+12345   Abid Raihan     30    3.40
+26345   Hafiz Adnan     100   3.24
+17345   Jakaria Ahmed   80    2.94
+</pre>
 
 Also show the time taken to complete the sorting (in microsecond or millisecond) in console.
 
@@ -64,7 +68,9 @@ Just like **_input.txt_** of Assignment-3. Take the value of **_i_** as user inp
 
 In the console, show all the information of the student having i'th highest CGPA. e.g. if user enters **_i = 3_** then your program should print the following in the console
 
-12345   Abid Raihan     30		3.40
+<pre>
+12345   Abid Raihan   30    3.40
+</pre>
 
 # Assignment 5
 Implement the weighted task scheduling problem from a given an array of tasks, where each task has **_start time_**, **_finishing time_** and **_priority/weight_**.
@@ -83,7 +89,7 @@ A text file called **_input.txt_** containing all the information of tasks. Each
 
 In the console, show all the information of tasks that maximize total weight and print the total weight as well. e.g. for the above input, the output should look just like below
 
-Selected activities:  
+Selected tasks:  
 7 18 20  
 23 32 15  
 

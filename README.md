@@ -73,11 +73,11 @@ In the console, show all the information of the student having i'th highest CGPA
 </pre>
 
 # Assignment 5
-Implement the weighted task scheduling problem from a given an array of tasks, where each task has **_start time_**, **_finishing time_** and **_priority/weight_**.
+Solve the **_Activity Scheduling Problem_** based on **priority** from a given array of activities, where each activity has **_start time_**, **_finishing time_** and **_priority_**.
 
 **Sample input**
 
-A text file called **_input.txt_** containing all the information of tasks. Each line of this file should contain the **_start time_**, **_finishing time_** and **_priority/weight_** separated by space just like below
+A text file called **_input.txt_** containing all the information of activities. Each line of this file should contain the **_start time_**, **_finishing time_** and **_priority_** separated by space just like below
 
 1 10 10  
 7 18 20  
@@ -87,10 +87,10 @@ A text file called **_input.txt_** containing all the information of tasks. Each
 
 **Sample output**
 
-In the console, show all the information of tasks that maximize total weight and print the total weight as well. e.g. for the above input, the output should look just like below
+In the console, show all the information of activities that maximize total priority and print the total priority as well. e.g. for the above input, the output should look just like below
 
-Selected tasks:  
+Selected activities:  
 7 18 20  
 23 32 15  
 
-Total weight: 35  
+Total priority: 35  

@@ -1,0 +1,8 @@
+# depslib dependency file v1.0
+1541751730 source:d:\documents\github repositories\cse-511-advanced-algorithms\assignment-5\main.cpp
+	<algorithm>
+	<cstring>
+	<fstream>
+	<iostream>
+	<sstream>
+

@@ -14,7 +14,7 @@ Enter target: 5
 Leftmost index of target is: 3
 
 # Assignment 2
-Compute the number of inversions in a given an array.
+Compute the number of inversions in a given array.
 
 **Sample input**
 

@@ -101,15 +101,15 @@ int get_last_non_clashing_activity(int index, activity *activities)
     return 0;
 }
 
-int top_down_schedule_activity(int index, int *non_clashing_activities,
+int top_down_schedule_activity(int index, int *last_non_clashing_activities,
                                int *memory, activity *activities)
 {
     if (memory[index] == -1)
     {
         memory[index] = max(activities[index].get_priority() +
-            top_down_schedule_activity(non_clashing_activities[index],
-                non_clashing_activities, memory, activities),
-            top_down_schedule_activity(index - 1, non_clashing_activities,
+            top_down_schedule_activity(last_non_clashing_activities[index],
+                last_non_clashing_activities, memory, activities),
+            top_down_schedule_activity(index - 1, last_non_clashing_activities,
                 memory, activities));
     }
 
@@ -117,38 +117,82 @@ int top_down_schedule_activity(int index, int *non_clashing_activities,
 }
 
 int bottom_up_schedule_activity(int number_of_activities,
-                                int *non_clashing_activities, int *memory,
+                                int *last_non_clashing_activities, int *memory,
                                 activity *activities)
 {
     for (int i = 1; i < number_of_activities; i++)
     {
         memory[i] = max(activities[i].get_priority() +
-                        memory[non_clashing_activities[i]], memory[i - 1]);
+                        memory[last_non_clashing_activities[i]], memory[i - 1]);
     }
 
     return memory[number_of_activities - 1];
 }
 
+void print_scheduled_activities(int index, int *last_non_clashing_activities,
+                            int *memory, activity *activities)
+{
+    if (index < 0)
+    {
+        return;
+    }
+
+    if (activities[index].get_priority() + memory[last_non_clashing_activities[index]] < memory[index - 1])
+    {
+        print_scheduled_activities(index - 1, last_non_clashing_activities, memory, activities);
+    }
+    else
+    {
+        cout << activities[index].to_string() << endl << endl;
+
+        print_scheduled_activities(last_non_clashing_activities[index], last_non_clashing_activities, memory, activities);
+    }
+}
+
 int main()
 {
-    int number_of_activities, *non_clashing_activities = NULL, *memory = NULL;
+    int selection, number_of_activities, total_priority,
+        *last_non_clashing_activities = NULL, *memory = NULL;
 
     activity *activities = activity::load_activities(number_of_activities);
-    non_clashing_activities = new int[number_of_activities];
+    last_non_clashing_activities = new int[number_of_activities];
     memory = new int[number_of_activities];
 
     for (int i = 0; i < number_of_activities; i++)
     {
-        non_clashing_activities[i] = get_last_non_clashing_activity(i, activities);
+        last_non_clashing_activities[i] = get_last_non_clashing_activity(i, activities);
     }
 
     memory[0] = 0;          // initializing first slot of the memory with zero...
-    memset(memory + 1, -1, sizeof(int) * number_of_activities);     // rest of the memory is filled with -1, needed for top-down approach...
 
-    cout << "Total priority (top-down approach): " << top_down_schedule_activity(number_of_activities - 1, non_clashing_activities, memory, activities) << endl;
-    cout << "Total priority (bottom-up approach): " << bottom_up_schedule_activity(number_of_activities, non_clashing_activities, memory, activities) << endl;
+    cout << "Select preferred approach:" << endl << "\t[1] Top-down approach" << endl << "\t[2] Bottom-up approach" << endl << "Selection: ";
+    cin >> selection;
 
-    delete [] non_clashing_activities;
+    switch (selection)
+    {
+    case 1:
+        memset(memory + 1, -1, sizeof(int) * number_of_activities);     // rest of the memory is filled with -1, needed for top-down approach...
+
+        total_priority = top_down_schedule_activity(number_of_activities - 1, last_non_clashing_activities, memory, activities);
+
+        break;
+    case 2:
+        total_priority = bottom_up_schedule_activity(number_of_activities, last_non_clashing_activities, memory, activities);
+
+        break;
+    default:
+        cout << "error: invalid selection..." << endl << endl;
+
+        return -1;
+    }
+
+    cout << endl << "Scheduled activities:" << endl << endl;
+
+    print_scheduled_activities(number_of_activities - 1, last_non_clashing_activities, memory, activities);
+
+    cout << "Total priority: " << total_priority << endl;
+
+    delete [] last_non_clashing_activities;
     delete [] memory;
     delete [] activities;
 

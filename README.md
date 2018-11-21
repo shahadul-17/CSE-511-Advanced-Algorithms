@@ -73,7 +73,7 @@ In the console, show all the information of the student having i'th highest CGPA
 </pre>
 
 # Assignment 5
-Solve the **_Activity Scheduling Problem_** based on **priority** from a given array of activities, where each activity has **_start time_**, **_finishing time_** and **_priority_**.
+Solve the **_Activity Scheduling Problem_** based on **priority** from a given array of activities using both **_Top-down_** and **_Bottom-up_** approach, where each activity has **_start time_**, **_finishing time_** and **_priority_**.
 
 **Sample input**
 
@@ -89,8 +89,22 @@ A text file called **_input.txt_** containing all the information of activities.
 
 In the console, show all the information of activities that maximize total priority and print the total priority as well. e.g. for the above input, the output should look just like below
 
-Selected activities:  
-7 18 20  
-23 32 15  
+<pre>
+Select preferred approach:
+        [1] Top-down approach
+        [2] Bottom-up approach
 
-Total priority: 35  
+Selection: 1
+
+Scheduled activities:
+
+Starting time: 23
+Finishing time: 32
+Priority: 15
+
+Starting time: 7
+Finishing time: 18
+Priority: 20
+
+Total priority: 35
+</pre>

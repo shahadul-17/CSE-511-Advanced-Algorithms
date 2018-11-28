@@ -108,3 +108,6 @@ Priority: 20
 
 Total priority: 35
 </pre>
+
+# Project
+The primary focus of this project is to develop a faster algorithm to search through **_Unsorted Array_** than any of the existing searching algorithms (e.g. linear search). This algorithm is called **_Bring Front Search_** as it brings the found query to the front of the array.

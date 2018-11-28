@@ -62,7 +62,7 @@ int main(int argc, char **argv)
     }
 
 	cout << "status: random unsorted array generated successfully." << endl;
-	cout << "prompt: please select a scenario\n\t[1] best case scenario\n\t[2] average case scenario\n\t[3] worst case scenario-\nselection: ";
+	cout << "prompt: please select a scenario-\n\t[1] best case scenario\n\t[2] average case scenario\n\t[3] worst case scenario\nselection: ";
 	cin >> selection;
 
 	switch (selection)
@@ -121,11 +121,11 @@ int main(int argc, char **argv)
 	time = clock();
 
 	for (int i = 0; i < QUERIES_LENGTH; i++)
-    {
+	{
 		search.bringFrontSearch(true, queries[i]);
-    }
+	}
 
-    time = clock() - time;
+	time = clock() - time;
 
 	cout << "status: randomized bring front search finished in: " << (double)time / CLOCKS_PER_SEC << " seconds." << endl;
 

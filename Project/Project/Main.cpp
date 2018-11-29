@@ -5,7 +5,7 @@
 
 #include "Search.h"		// our Search.h header file...
 
-#define UNSORTED_ARRAY_LENGTH 10000
+#define UNSORTED_ARRAY_LENGTH 100000
 #define QUERIES_LENGTH UNSORTED_ARRAY_LENGTH / 2
 
 using namespace std;
@@ -18,30 +18,49 @@ void bestCaseScenario(int *queries, int *unsortedArray)		// every single query i
 	}
 }
 
-void averageCaseScenario(int *queries, int *unsortedArray)
+void firstAverageCaseScenario(int *queries, int *unsortedArray)		// queries are repeated every 100 times...
 {
-	for (int i = 0, j = 1; i < QUERIES_LENGTH; i++)
+	for (int i = 0, j = 1; i < QUERIES_LENGTH; i++, j++)
     {
-        if (j == 51)
-        {
-            j = 1;
-        }
+		queries[i] = unsortedArray[UNSORTED_ARRAY_LENGTH - j];
 
-		queries[i] = unsortedArray[UNSORTED_ARRAY_LENGTH - j]; // bringFrontSearch.generateRandomNumber(1, 10000);
-
-        if (i % 2 == 0)
-        {
-            j++;
-        }
+		if (j == UNSORTED_ARRAY_LENGTH / 100)
+		{
+			j = 1;
+		}
     }
 }
 
-void worstCaseScenario(int *queries, int *unsortedArray)		// every single query is for the last index of the array...
+void secondAverageCaseScenario(int *queries, int *unsortedArray)		// queries start from the last element of the array...
+{
+	for (int i = 0, j = 1; i < QUERIES_LENGTH; i++)
+    {
+		queries[i] = unsortedArray[UNSORTED_ARRAY_LENGTH - j];
+    }
+}
+
+void firstWorstCaseScenario(int *queries, int *unsortedArray)		// every single query is for the second last index of the array...
 {
 	for (int i = 0; i < QUERIES_LENGTH; i++)
 	{
-		queries[i] = unsortedArray[UNSORTED_ARRAY_LENGTH - 1];
+		queries[i] = unsortedArray[UNSORTED_ARRAY_LENGTH - 2];
 	}
+}
+
+void secondWorstCaseScenario(int *queries, int *unsortedArray)		// none of the queries exists in the array...
+{
+	for (int i = 0; i < QUERIES_LENGTH; i++)
+	{
+		queries[i] = unsortedArray[UNSORTED_ARRAY_LENGTH - 2] + 1;
+	}
+}
+
+void randomScenario(int *queries, int *unsortedArray)
+{
+	for (int i = 0, j = 1; i < QUERIES_LENGTH; i++)
+    {
+		queries[i] = Search::generateRandomNumber(1, UNSORTED_ARRAY_LENGTH);
+    }
 }
 
 int main(int argc, char **argv)
@@ -54,15 +73,18 @@ int main(int argc, char **argv)
 
 	cout << "status: generating random unsorted array." << endl;
 
-	unsortedArray[UNSORTED_ARRAY_LENGTH - 1] = UNSORTED_ARRAY_LENGTH + QUERIES_LENGTH;
+	unsortedArray[UNSORTED_ARRAY_LENGTH - 1] = UNSORTED_ARRAY_LENGTH + QUERIES_LENGTH;		// last element of the array is distinct...
+	unsortedArray[UNSORTED_ARRAY_LENGTH - 2] = unsortedArray[UNSORTED_ARRAY_LENGTH - 1] + 1;		// second last element of the array is distinct...
 
-	for (int i = UNSORTED_ARRAY_LENGTH - 2; i > -1; i--)
+	for (int i = UNSORTED_ARRAY_LENGTH - 3; i > -1; i--)
     {
 		unsortedArray[i] = Search::generateRandomNumber(1, UNSORTED_ARRAY_LENGTH);
     }
 
-	cout << "status: random unsorted array generated successfully." << endl;
-	cout << "prompt: please select a scenario-\n\t[1] best case scenario\n\t[2] average case scenario\n\t[3] worst case scenario\nselection: ";
+	cout << "status: random unsorted array generated successfully." << endl << endl;
+	cout << "prompt: please select a scenario-\n\t[1] best case scenario\n\t[2] first average case scenario"
+		<< "\n\t[3] second average case scenario\n\t[4] first worst case scenario"
+		<< "\n\t[5] second worst case scenario\n\t[6] random scenario\nselection: ";
 	cin >> selection;
 
 	switch (selection)
@@ -72,11 +94,23 @@ int main(int argc, char **argv)
 
 		break;
 	case 2:
-		averageCaseScenario(queries, unsortedArray);
+		firstAverageCaseScenario(queries, unsortedArray);
 
 		break;
 	case 3:
-		worstCaseScenario(queries, unsortedArray);
+		secondAverageCaseScenario(queries, unsortedArray);
+
+		break;
+	case 4:
+		firstWorstCaseScenario(queries, unsortedArray);
+
+		break;
+	case 5:
+		secondWorstCaseScenario(queries, unsortedArray);		// none of the queries exist in array...
+
+		break;
+	case 6:
+		randomScenario(queries, unsortedArray);
 
 		break;
 	default:
@@ -114,22 +148,10 @@ int main(int argc, char **argv)
     time = clock() - time;
 
 	cout << "status: bring front search finished in: " << (double)time / CLOCKS_PER_SEC << " seconds." << endl << endl;
-	cout << "status: randomized bring front search running on random unsorted array." << endl;
-
-	search.resetArray();		// restoring the unsorted array to initial state...
-
-	time = clock();
-
-	for (int i = 0; i < QUERIES_LENGTH; i++)
-	{
-		search.bringFrontSearch(true, queries[i]);
-	}
-
-	time = clock() - time;
-
-	cout << "status: randomized bring front search finished in: " << (double)time / CLOCKS_PER_SEC << " seconds." << endl;
 
 	delete [] queries;
+
+	cout << "status: completed" << endl;
 
 	_getch();
 

@@ -39,17 +39,34 @@ void Search::resetArray()
 	memcpy(unsortedArray, initialUnsortedArray, arrayLength * sizeof(int));		// copying original array...
 }
 
+// most optimized linear search (minimized number of comparisons)...
+// original source: https://www.geeksforgeeks.org/search-element-unsorted-array-using-minimum-number-comparisons/
 int Search::linearSearch(int query)
 {
-	for (int i = 0; i < arrayLength; i++)
-    {
-        if (query == unsortedArray[i])
-        {
-            return i;
-        }
-    }
+	const int lastIndex = arrayLength - 1;
 
-    return -1;
+	if (query == unsortedArray[lastIndex])
+	{
+		return lastIndex;
+	}
+
+	int temporaryValue = unsortedArray[lastIndex];
+	unsortedArray[lastIndex] = query;
+
+	for (int i = 0; ; i++)
+	{
+		if (query == unsortedArray[i])
+		{
+			unsortedArray[lastIndex] = temporaryValue;
+
+			if (i < lastIndex)
+			{
+				return i;
+			}
+
+			return -1;
+		}
+	}
 }
 
 void Search::circularIncrementWindowIndex()       // O (1)
@@ -64,81 +81,128 @@ void Search::circularIncrementWindowIndex()       // O (1)
     }
 }
 
-int Search::bringFrontSearch(int query)
+int Search::bringFrontSearch(int query)		// based on most optimized linear search (minimized number of comparisons)...
 {
-    int i = 0;
+	const int lastIndex = arrayLength - 1;
 
-    for (i = 0; i < arrayLength; i++)
-    {
-        if (query == unsortedArray[i])
-        {
-            if (i > windowLength)           // O (1)
-            {
-                /*
-                 * if one element with same value as query already exists within the window...
-                 * we should increment index of window by 1...
-                 */
-                if (query == unsortedArray[windowIndex])       // O (1)
-                {
-                    circularIncrementWindowIndex();       // O (1)
-                }
+	if (query == unsortedArray[lastIndex])
+	{
+		return lastIndex;
+	}
 
-                // can be replaced by any kind of swap...
-				swapByXOR(unsortedArray + i, unsortedArray + windowIndex);
+	int temporaryValue = unsortedArray[lastIndex];
+	unsortedArray[lastIndex] = query;
 
-                i = windowIndex;              // O (1)
+	for (int i = 0; ; i++)
+	{
+		if (query == unsortedArray[i])
+		{
+			unsortedArray[lastIndex] = temporaryValue;
 
-                circularIncrementWindowIndex();        // O (1)
-            }
+			if (i < lastIndex)
+			{
+				if (i > windowLength)           // O (1)
+				{
+					/*
+					* if one element with same value as query already exists within the window...
+					* we should increment index of window by 1...
+					*/
+					if (query == unsortedArray[windowIndex])       // O (1)
+					{
+						circularIncrementWindowIndex();       // O (1)
+					}
 
-            return i;
-        }
-    }
+					// can be replaced by any kind of swap...
+					swapByXOR(unsortedArray + i, unsortedArray + windowIndex);
 
-    return -1;
+					i = windowIndex;              // O (1)
+
+					circularIncrementWindowIndex();        // O (1)
+				}
+
+				return i;
+			}
+
+			return -1;
+		}
+	}
 }
 
-int Search::randomizedBringFrontSearch(int query)
+int Search::randomizedBringFrontSearch(int query)		// this performs worst...
 {
-    int i = 0, randomIndex = -1;
+	if (query == unsortedArray[windowLength])
+	{
+		return windowLength;
+	}
 
-    for (i = 0; i <= windowLength; i++)
-    {
-        if (unsortedArray[i] == query)
-        {
-            return i;
-        }
-    }
+	int i = 0, temporaryValue = unsortedArray[windowLength];
+	unsortedArray[windowLength] = query;
 
-    do
-    {
-        randomIndex = generateRandomNumber(i, arrayLength - 1);
+	for ( ; ; i++)
+	{
+		if (query == unsortedArray[i])
+		{
+			unsortedArray[windowLength] = temporaryValue;
 
-        if (unsortedArray[randomIndex] == query)
-        {
-            if (query == unsortedArray[windowIndex])       					// O (1)
-            {
-                circularIncrementWindowIndex();       						// O (1)
-            }
+			if (i < windowLength)
+			{
+				return i;
+			}
 
-            swapByXOR(unsortedArray + randomIndex, unsortedArray + windowIndex);
+			break;
+		}
+	}
 
-            randomIndex = windowIndex;              						// O (1)
+	int randomIndex = -1;
+	const int lastIndex = arrayLength - 1;
 
-            circularIncrementWindowIndex();        							// O (1)
+	if (query == unsortedArray[lastIndex])
+	{
+		return lastIndex;
+	}
+	
+	temporaryValue = unsortedArray[lastIndex];
+	unsortedArray[lastIndex] = query;
 
-            return randomIndex;
-        }
-        else
+	for ( ; ; i++)
+	{
+		randomIndex = generateRandomNumber(i, lastIndex);
+
+		if (query == unsortedArray[randomIndex])
+		{
+			unsortedArray[lastIndex] = temporaryValue;
+
+			if (randomIndex < lastIndex)
+			{
+				if (randomIndex > windowLength)           // O (1)
+				{
+					/*
+					* if one element with same value as query already exists within the window...
+					* we should increment index of window by 1...
+					*/
+					if (query == unsortedArray[windowIndex])       // O (1)
+					{
+						circularIncrementWindowIndex();       // O (1)
+					}
+
+					// can be replaced by any kind of swap...
+					swapByXOR(unsortedArray + randomIndex, unsortedArray + windowIndex);
+
+					randomIndex = windowIndex;              // O (1)
+
+					circularIncrementWindowIndex();        // O (1)
+				}
+
+				return randomIndex;
+			}
+
+			return -1;
+		}
+		else
         {
             swapByXOR(unsortedArray + i, unsortedArray + randomIndex);
         }
-
-        i++;
-    }
-    while (i < arrayLength);
-
-    return -1;
+	}
 }
 
 int Search::bringFrontSearch(bool randomized, int query)

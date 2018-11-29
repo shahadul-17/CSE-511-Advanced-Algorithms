@@ -1,42 +1,35 @@
 #include "Search.h"
 
-Search::Search(int arrayLength, int *unsortedArray)
+Search::Search(int arrayLength, const int *unsortedArray)
 {
-	initialUnsortedArray = NULL;
+	this->unsortedArray = NULL;
 
 	setArray(arrayLength, unsortedArray);
-    srand(time(NULL));
 }
 
 Search::~Search()
 {
-	delete [] unsortedArray;
-	delete [] initialUnsortedArray;
+	delete [] unsortedArray;		// releasing the resource occupied by the dynamically allocated unsorted array...
 }
 
-void Search::setArray(int arrayLength, int *unsortedArray)
+void Search::setArray(int arrayLength, const int *unsortedArray)
 {
     windowIndex = 0;
     windowLength = arrayLength / 4;		// window length should be quarter of the array length...
 
 	this->arrayLength = arrayLength;
-    this->unsortedArray = unsortedArray;
 
-	if (initialUnsortedArray != NULL)
+	if (this->unsortedArray != NULL)
 	{
-		delete [] initialUnsortedArray;
+		delete [] unsortedArray;
 	}
 
-	initialUnsortedArray = new int[arrayLength];
+	this->unsortedArray = new int[arrayLength];
 
-	memcpy(initialUnsortedArray, unsortedArray, arrayLength * sizeof(int));		// keeping a copy of unsorted array...
-}
-
-void Search::resetArray()
-{
-	windowIndex = 0;
-
-	memcpy(unsortedArray, initialUnsortedArray, arrayLength * sizeof(int));		// copying original array...
+	for (int i = 0; i < arrayLength; i++)
+	{
+		this->unsortedArray[i] = unsortedArray[i];
+	}
 }
 
 // most optimized linear search (minimized number of comparisons)...
@@ -112,7 +105,8 @@ int Search::bringFrontSearch(int query)		// based on most optimized linear searc
 						circularIncrementWindowIndex();       // O (1)
 					}
 
-					// can be replaced by any kind of swap...
+					// swapping the index i'th element with the index windowIndex'th element...
+					// note: can be replaced by any kind of swap...
 					swapByXOR(unsortedArray + i, unsortedArray + windowIndex);
 
 					i = windowIndex;              // O (1)
@@ -261,6 +255,11 @@ void Search::swapByXOR(int *firstElement, int *secondElement)
 	*firstElement ^= *secondElement;
 	*secondElement ^= *firstElement;
 	*firstElement ^= *secondElement;
+}
+
+void Search::setRandomNumberSeed()
+{
+	srand(time(NULL));
 }
 
 int Search::generateRandomNumber(int minimum, int maximum)

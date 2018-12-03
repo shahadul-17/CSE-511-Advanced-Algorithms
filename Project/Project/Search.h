@@ -3,15 +3,14 @@
 #include <iostream>
 #include <time.h>
 
-using namespace std;
-
 class Search
 {
 public:
-	Search(int, const int *);
+	Search(int, int *);
 	~Search();
 
-	void setArray(int, const int *);
+	void setUnsortedArray(int, int *);
+	void reset();
 	int linearSearch(int);
 	int bringFrontSearch(bool, int);
 	void print();
@@ -20,7 +19,7 @@ public:
 	static int generateRandomNumber(int, int);
 
 private:
-    int temporaryValue, windowIndex, windowLength, arrayLength, *unsortedArray;
+    int temporaryValue, windowIndex, windowLength, arrayLength, *unsortedArray, *initialUnsortedArray;
     void circularIncrementWindowIndex();
 	int bringFrontSearch(int);
     int randomizedBringFrontSearch(int);

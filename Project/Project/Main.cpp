@@ -7,59 +7,59 @@
 
 #define SCENARIOS 6
 #define MAXIMUM_CHARACTERS 19
-#define UNSORTED_ARRAY_LENGTH 100000
-#define QUERIES_LENGTH UNSORTED_ARRAY_LENGTH / 2
 
-void bestCaseScenario(int *queries, int *unsortedArray)		// every single query is for the first index of the array...
+using namespace std;
+
+void bestCaseScenario(int queriesLength, int *queries, int *unsortedArray)		// every single query is for the first index of the array...
 {
-	for (int i = 0; i < QUERIES_LENGTH; i++)
+	for (int i = 0; i < queriesLength; i++)
 	{
 		queries[i] = unsortedArray[0];
 	}
 }
 
-void firstAverageCaseScenario(int *queries, int *unsortedArray)		// same queries are repeated every 100 iterations...
+void firstAverageCaseScenario(int queriesLength, int unsortedArrayLength, int *queries, int *unsortedArray)		// same queries are repeated every 100 iterations...
 {
-	for (int i = 0, j = 1; i < QUERIES_LENGTH; i++, j++)
+	for (int i = 0, j = 1; i < queriesLength; i++, j++)
     {
-		queries[i] = unsortedArray[UNSORTED_ARRAY_LENGTH - j];
+		queries[i] = unsortedArray[unsortedArrayLength - j];
 
-		if (j == UNSORTED_ARRAY_LENGTH / 100)
+		if (j == unsortedArrayLength / 100)
 		{
 			j = 1;
 		}
     }
 }
 
-void secondAverageCaseScenario(int *queries, int *unsortedArray)		// queries start from the last element of the array...
+void secondAverageCaseScenario(int queriesLength, int unsortedArrayLength, int *queries, int *unsortedArray)		// queries start from the last element of the array...
 {
-	for (int i = 0, j = 1; i < QUERIES_LENGTH; i++)
+	for (int i = 0; i < queriesLength; i++)
     {
-		queries[i] = unsortedArray[UNSORTED_ARRAY_LENGTH - j];
+		queries[i] = unsortedArray[unsortedArrayLength - i - 1];
     }
 }
 
-void firstWorstCaseScenario(int *queries, int *unsortedArray)		// every single query is for the second last index of the array...
+void firstWorstCaseScenario(int queriesLength, int unsortedArrayLength, int *queries, int *unsortedArray)		// every single query is for the second last index of the array...
 {
-	for (int i = 0; i < QUERIES_LENGTH; i++)
+	for (int i = 0; i < queriesLength; i++)
 	{
-		queries[i] = unsortedArray[UNSORTED_ARRAY_LENGTH - 2];
+		queries[i] = unsortedArray[unsortedArrayLength - 2];
 	}
 }
 
-void secondWorstCaseScenario(int *queries, int *unsortedArray)		// none of the queries exists in the array...
+void secondWorstCaseScenario(int queriesLength, int unsortedArrayLength, int *queries, int *unsortedArray)		// none of the queries exists in the array...
 {
-	for (int i = 0; i < QUERIES_LENGTH; i++)
+	for (int i = 0; i < queriesLength; i++)
 	{
-		queries[i] = unsortedArray[UNSORTED_ARRAY_LENGTH - 2] + 1;
+		queries[i] = unsortedArray[unsortedArrayLength - 2] + 1;
 	}
 }
 
-void randomScenario(int *queries, int *unsortedArray)		// generates random queries...
+void randomScenario(int queriesLength, int unsortedArrayLength, int *queries, int *unsortedArray)		// generates random queries...
 {
-	for (int i = 0, j = 1; i < QUERIES_LENGTH; i++)
+	for (int i = 0, j = 1; i < queriesLength; i++)
     {
-		queries[i] = Search::generateRandomNumber(1, UNSORTED_ARRAY_LENGTH);
+		queries[i] = Search::generateRandomNumber(1, unsortedArrayLength);
     }
 }
 
@@ -85,8 +85,21 @@ string getTimeInSecondsString(double timeInSeconds, stringstream *stringStream)	
 
 int main(int argc, char **argv)
 {
-	unsigned short characters = 0;
-	int scenario = 0, *queries = new int[QUERIES_LENGTH], *unsortedArray = new int[UNSORTED_ARRAY_LENGTH];
+	int unsortedArrayLength = 0;
+
+	if (argc > 1)
+	{
+		unsortedArrayLength = atoi(argv[1]);
+	}
+
+	while (unsortedArrayLength < 100)
+	{
+		cout << "prompt: enter the length of the unsorted array (must be greater than 9,999).\nlength: ";
+		cin >> unsortedArrayLength;
+		cout << endl;
+	}
+
+	int queriesLength = unsortedArrayLength / 2, *queries = new int[queriesLength], *unsortedArray = new int[unsortedArrayLength];
 	double timeInSeconds = 0.0, totalTimeInSeconds = 0.0;
 
 	clock_t timeTakenByLinearSearch, timeTakenByBringFrontSearch;
@@ -98,20 +111,22 @@ int main(int argc, char **argv)
 	};
 	stringstream stringStream;
 
-	cout << "status: generating random unsorted array of length " << UNSORTED_ARRAY_LENGTH << "." << endl;
+	cout << "status: generating random unsorted array of length " << unsortedArrayLength << "." << endl;
 
-	unsortedArray[UNSORTED_ARRAY_LENGTH - 1] = UNSORTED_ARRAY_LENGTH + QUERIES_LENGTH;		// last element of the array is distinct...
-	unsortedArray[UNSORTED_ARRAY_LENGTH - 2] = unsortedArray[UNSORTED_ARRAY_LENGTH - 1] + 1;		// second last element of the array is distinct...
+	unsortedArray[unsortedArrayLength - 1] = unsortedArrayLength + queriesLength;		// last element of the array is distinct...
+	unsortedArray[unsortedArrayLength - 2] = unsortedArray[unsortedArrayLength - 1] + 1;		// second last element of the array is distinct...
 
 	Search::setRandomNumberSeed();		// sets seed for generating random numbers...
 
-	for (int i = UNSORTED_ARRAY_LENGTH - 3; i > -1; i--)
+	for (int i = unsortedArrayLength - 3; i > -1; i--)
     {
-		unsortedArray[i] = Search::generateRandomNumber(1, UNSORTED_ARRAY_LENGTH);
+		unsortedArray[i] = Search::generateRandomNumber(1, unsortedArrayLength);
     }
 
+	Search search(unsortedArrayLength, unsortedArray);		// creating instance of Search...
+
 	cout << "status: random unsorted array generated successfully." << endl;
-	cout << "note: we will run " << QUERIES_LENGTH << " queries for each algorithm per scenario." << endl;
+	cout << "note: we will run " << queriesLength << " queries for each algorithm per scenario." << endl;
 	cout << "note: unit for time is represented in seconds (denoted by 's')." << endl;
 	cout << "status: starting benchmark." << endl << endl;
 	cout << "[#]            scenario | linear search      | bring front search | difference" << endl;
@@ -124,38 +139,36 @@ int main(int argc, char **argv)
 		switch (i)
 		{
 		case 1:
-			bestCaseScenario(queries, unsortedArray);				// every single query is for the first index of the array...
+			bestCaseScenario(queriesLength, queries, unsortedArray);				// every single query is for the first index of the array...
 
 			break;
 		case 2:
-			firstAverageCaseScenario(queries, unsortedArray);		// same queries are repeated every 100 iterations...
+			firstAverageCaseScenario(queriesLength, unsortedArrayLength, queries, unsortedArray);		// same queries are repeated every 100 iterations...
 
 			break;
 		case 3:
-			secondAverageCaseScenario(queries, unsortedArray);		// queries start from the last element of the array...
+			secondAverageCaseScenario(queriesLength, unsortedArrayLength, queries, unsortedArray);		// queries start from the last element of the array...
 
 			break;
 		case 4:
-			firstWorstCaseScenario(queries, unsortedArray);			// every single query is for the second last index of the array...
+			firstWorstCaseScenario(queriesLength, unsortedArrayLength, queries, unsortedArray);			// every single query is for the second last index of the array...
 
 			break;
 		case 5:
-			secondWorstCaseScenario(queries, unsortedArray);		// none of the queries exist in array...
+			secondWorstCaseScenario(queriesLength, unsortedArrayLength, queries, unsortedArray);		// none of the queries exist in array...
 
 			break;
 		case 6:
-			randomScenario(queries, unsortedArray);					// generates random queries...
+			randomScenario(queriesLength, unsortedArrayLength, queries, unsortedArray);					// generates random queries...
 
 			break;
 		default:
 			break;
 		}
 
-		Search search(UNSORTED_ARRAY_LENGTH, unsortedArray);		// creating new instance...
-
 		timeTakenByLinearSearch = clock();			// clock starts for linear search...
 
-		for (int j = 0; j < QUERIES_LENGTH; j++)
+		for (int j = 0; j < queriesLength; j++)
 		{
 			search.linearSearch(queries[j]);			// performing linear search...
 		}
@@ -166,7 +179,7 @@ int main(int argc, char **argv)
 
 		timeTakenByBringFrontSearch = clock();			// clock starts for bring front search...
 
-		for (int j = 0; j < QUERIES_LENGTH; j++)
+		for (int j = 0; j < queriesLength; j++)
 		{
 			search.bringFrontSearch(false, queries[j]);			// performing bring front search...
 		}
@@ -187,6 +200,8 @@ int main(int argc, char **argv)
 
 		stringStream << timeInSeconds << " s";
 		cout << stringStream.str() << endl;
+
+		search.reset();			// resets the unsorted array to its initial state...
 	}
 
 	delete [] queries;			// releasing the resource occupied by the dynamically allocated 'queries' array...

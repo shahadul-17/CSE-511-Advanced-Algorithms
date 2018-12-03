@@ -1,10 +1,12 @@
 #include "Search.h"
 
-Search::Search(int arrayLength, const int *unsortedArray)
+using namespace std;
+
+Search::Search(int arrayLength, int *unsortedArray)
 {
 	this->unsortedArray = NULL;
 
-	setArray(arrayLength, unsortedArray);
+	setUnsortedArray(arrayLength, unsortedArray);
 }
 
 Search::~Search()
@@ -12,7 +14,7 @@ Search::~Search()
 	delete [] unsortedArray;		// releasing the resource occupied by the dynamically allocated unsorted array...
 }
 
-void Search::setArray(int arrayLength, const int *unsortedArray)
+void Search::setUnsortedArray(int arrayLength, int *unsortedArray)
 {
     windowIndex = 0;
     windowLength = arrayLength / 4;		// window length should be quarter of the array length...
@@ -21,7 +23,7 @@ void Search::setArray(int arrayLength, const int *unsortedArray)
 
 	if (this->unsortedArray != NULL)
 	{
-		delete [] unsortedArray;
+		delete [] this->unsortedArray;
 	}
 
 	this->unsortedArray = new int[arrayLength];
@@ -30,6 +32,13 @@ void Search::setArray(int arrayLength, const int *unsortedArray)
 	{
 		this->unsortedArray[i] = unsortedArray[i];
 	}
+
+	initialUnsortedArray = unsortedArray;
+}
+
+void Search::reset()
+{
+	setUnsortedArray(arrayLength, initialUnsortedArray);
 }
 
 // most optimized linear search (minimized number of comparisons)...
@@ -100,7 +109,7 @@ int Search::bringFrontSearch(int query)		// based on most optimized linear searc
 					* if one element with same value as query already exists within the window...
 					* we should increment index of window by 1...
 					*/
-					if (query == unsortedArray[windowIndex])       // O (1)
+					while (query == unsortedArray[windowIndex])       // O (n) -> but in reality it, probability of 'n' being large is very small...
 					{
 						circularIncrementWindowIndex();       // O (1)
 					}
@@ -174,7 +183,7 @@ int Search::randomizedBringFrontSearch(int query)		// this performs worst...
 					* if one element with same value as query already exists within the window...
 					* we should increment index of window by 1...
 					*/
-					if (query == unsortedArray[windowIndex])       // O (1)
+					while (query == unsortedArray[windowIndex])       // O (1)
 					{
 						circularIncrementWindowIndex();       // O (1)
 					}
@@ -223,10 +232,10 @@ void Search::print()
 
 void Search::swap(int *firstElement, int *secondElement)
 {
-	if (*firstElement == *secondElement)
+	/*if (*firstElement == *secondElement)
 	{
 		return;
-	}
+	}*/
 
 	int temporaryValue = *firstElement;
 	*firstElement = *secondElement;
@@ -235,10 +244,10 @@ void Search::swap(int *firstElement, int *secondElement)
 
 void Search::swapByAddition(int *firstElement, int *secondElement)
 {
-	if (*firstElement == *secondElement)
+	/*if (*firstElement == *secondElement)
 	{
 		return;
-	}
+	}*/
 
 	*firstElement += *secondElement;
 	*secondElement = *firstElement - *secondElement;
@@ -247,10 +256,10 @@ void Search::swapByAddition(int *firstElement, int *secondElement)
 
 void Search::swapByXOR(int *firstElement, int *secondElement)
 {
-	if (*firstElement == *secondElement)
+	/*if (*firstElement == *secondElement)
 	{
 		return;
-	}
+	}*/
 
 	*firstElement ^= *secondElement;
 	*secondElement ^= *firstElement;

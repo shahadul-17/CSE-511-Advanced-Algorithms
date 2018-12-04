@@ -17,23 +17,21 @@ Search::~Search()
 void Search::setUnsortedArray(int arrayLength, int *unsortedArray)
 {
     windowIndex = 0;
-    windowLength = arrayLength / 4;		// window length should be quarter of the array length...
-
-	this->arrayLength = arrayLength;
-
-	if (this->unsortedArray != NULL)
-	{
-		delete [] this->unsortedArray;
-	}
-
-	this->unsortedArray = new int[arrayLength];
-
-	for (int i = 0; i < arrayLength; i++)
-	{
-		this->unsortedArray[i] = unsortedArray[i];
-	}
-
 	initialUnsortedArray = unsortedArray;
+
+	if (this->arrayLength != arrayLength)
+	{
+		if (this->unsortedArray != NULL)
+		{
+			delete [] this->unsortedArray;		// deleting previously allocated array...
+		}
+
+		windowLength = arrayLength / 4;		// window length should be quarter of the array length...
+		this->arrayLength = arrayLength;
+		this->unsortedArray = new int[arrayLength];
+	}
+
+	memcpy(this->unsortedArray, unsortedArray, arrayLength * sizeof(int));
 }
 
 void Search::reset()
@@ -85,50 +83,29 @@ void Search::circularIncrementWindowIndex()       // O (1)
 
 int Search::bringFrontSearch(int query)		// based on most optimized linear search (minimized number of comparisons)...
 {
-	const int lastIndex = arrayLength - 1;
+	int index = linearSearch(query);
 
-	if (query == unsortedArray[lastIndex])
+	if (index > windowLength)           // O (1)
 	{
-		return lastIndex;
-	}
-
-	int temporaryValue = unsortedArray[lastIndex];
-	unsortedArray[lastIndex] = query;
-
-	for (int i = 0; ; i++)
-	{
-		if (query == unsortedArray[i])
+		/*
+		* if one element with same value as query already exists within the window...
+		* we should increment index of window by 1...
+		*/
+		while (query == unsortedArray[windowIndex])       // O (n) -> but in reality it, probability of 'n' being large is very small...
 		{
-			unsortedArray[lastIndex] = temporaryValue;
-
-			if (i < lastIndex)
-			{
-				if (i > windowLength)           // O (1)
-				{
-					/*
-					* if one element with same value as query already exists within the window...
-					* we should increment index of window by 1...
-					*/
-					while (query == unsortedArray[windowIndex])       // O (n) -> but in reality it, probability of 'n' being large is very small...
-					{
-						circularIncrementWindowIndex();       // O (1)
-					}
-
-					// swapping the index i'th element with the index windowIndex'th element...
-					// note: can be replaced by any kind of swap...
-					swapByXOR(unsortedArray + i, unsortedArray + windowIndex);
-
-					i = windowIndex;              // O (1)
-
-					circularIncrementWindowIndex();        // O (1)
-				}
-
-				return i;
-			}
-
-			return -1;
+			circularIncrementWindowIndex();       // O (1)
 		}
+
+		// swapping the index i'th element with the index windowIndex'th element...
+		// note: can be replaced by any kind of swap...
+		swapByXOR(unsortedArray + index, unsortedArray + windowIndex);
+
+		index = windowIndex;              // O (1)
+
+		circularIncrementWindowIndex();        // O (1)
 	}
+
+	return index;
 }
 
 int Search::randomizedBringFrontSearch(int query)		// this performs worst...

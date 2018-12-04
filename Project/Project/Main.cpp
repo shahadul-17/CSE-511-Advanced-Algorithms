@@ -57,7 +57,7 @@ void secondWorstCaseScenario(int queriesLength, int unsortedArrayLength, int *qu
 
 void randomScenario(int queriesLength, int unsortedArrayLength, int *queries, int *unsortedArray)		// generates random queries...
 {
-	for (int i = 0, j = 1; i < queriesLength; i++)
+	for (int i = 0; i < queriesLength; i++)
     {
 		queries[i] = Search::generateRandomNumber(1, unsortedArrayLength);
     }
